@@ -10,16 +10,16 @@ When the 11th edition of Warhammer 40,000 arrived, physical mission card decks w
 
 Each deck lives in its own folder as individual card images (front and back), ready for printing:
 
-| Folder | Contents |
+| Deck | Contents |
 | --- | --- |
-| `attacker-secondary-missions` | Secondary mission cards for the attacker |
-| `defender-secondary-missions` | Secondary mission cards for the defender |
-| `disruption` | Disruption mission deck |
-| `force-disposition` | Force disposition cards |
-| `priority-assets` | Priority Assets mission deck |
-| `purge-the-foe` | Purge the Foe mission deck |
-| `reconnaissance` | Reconnaissance mission deck |
-| `take-and-hold` | Take and Hold mission deck |
+| [Attacker Secondary Missions](attacker-secondary-missions/README.md) | Secondary mission cards for the attacker |
+| [Defender Secondary Missions](defender-secondary-missions/README.md) | Secondary mission cards for the defender |
+| [Disruption](disruption/README.md) | Disruption mission deck |
+| [Force Disposition](force-disposition/README.md) | Force disposition cards |
+| [Priority Assets](priority-assets/README.md) | Priority Assets mission deck |
+| [Purge the Foe](purge-the-foe/README.md) | Purge the Foe mission deck |
+| [Reconnaissance](reconnaissance/README.md) | Reconnaissance mission deck |
+| [Take and Hold](take-and-hold/README.md) | Take and Hold mission deck |
 
 ## Printing
 
