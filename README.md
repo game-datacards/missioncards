@@ -23,7 +23,9 @@ Each deck lives in its own folder as individual card images (front and back), re
 
 ## Printing
 
-The cards are provided as PNG images sized for standard card printing. Print fronts and backs double-sided, or print fronts only and use sleeves with an opaque backing.
+The cards are designed as tarot sized cards: 70 x 121 mm (2.75 x 4.75 in). All images are PNG files at 1160 x 1988 pixels, which works out to roughly 420 DPI at tarot size, comfortably above the 300 DPI typically required for sharp card printing.
+
+Print fronts and backs double-sided, or print fronts only and use sleeves with an opaque backing. Tarot sized card sleeves (70 x 121 mm) fit these cards.
 
 ## Contributing
 
