@@ -1,9 +1,9 @@
 # Disruption
 
-[Back to all decks](../../../README.md)
+[Back to the Tarot — No Bleed index](../README.md)
 
 | | | |
 | --- | --- | --- |
-| ![death trap back 2 2 rule](death-trap-back-2-2-rule.png) | ![death trap vs green 1 2](death-trap-vs-green-1-2.png) | ![delaying action vs red](delaying-action-vs-red.png) |
-| ![locate and deny back 2 2 rule](locate-and-deny-back-2-2-rule.png) | ![locate and deny vs yellow 1 2](locate-and-deny-vs-yellow-1-2.png) | ![outmanoeuvre vs blue](outmanoeuvre-vs-blue.png) |
-| ![smoke and mirrors back 2 2 rule](smoke-and-mirrors-back-2-2-rule.png) | ![smoke and mirrors vs teal 1 2](smoke-and-mirrors-vs-teal-1-2.png) | |
+| ![death trap 1 2](death-trap-1-2.png) | ![death trap action 2 2](death-trap-action-2-2.png) | ![delaying action](delaying-action.png) |
+| ![locate and deny 1 2](locate-and-deny-1-2.png) | ![locate and deny action 2 2](locate-and-deny-action-2-2.png) | ![outmanoeuvre](outmanoeuvre.png) |
+| ![smoke and mirrors 1 2](smoke-and-mirrors-1-2.png) | ![smoke and mirrors action 2 2](smoke-and-mirrors-action-2-2.png) |  |

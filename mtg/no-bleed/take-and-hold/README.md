@@ -1,6 +1,6 @@
 # Take and Hold
 
-[Back to all decks](../../../README.md)
+[Back to the Standard / MTG — No Bleed index](../README.md)
 
 | | | |
 | --- | --- | --- |

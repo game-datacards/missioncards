@@ -1,6 +1,6 @@
 # Force Disposition
 
-[Back to all decks](../../../README.md)
+[Back to the Standard / MTG — With Bleed index](../README.md)
 
 | | | |
 | --- | --- | --- |

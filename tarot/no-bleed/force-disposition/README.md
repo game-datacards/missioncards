@@ -1,8 +1,8 @@
 # Force Disposition
 
-[Back to all decks](../../../README.md)
+[Back to the Tarot — No Bleed index](../README.md)
 
 | | | |
 | --- | --- | --- |
-| ![force disposition disruption](force-disposition-disruption.png) | ![force disposition priority assets](force-disposition-priority-assets.png) | ![force disposition purge the foe](force-disposition-purge-the-foe.png) |
-| ![force disposition reconnaissance](force-disposition-reconnaissance.png) | ![force disposition take and hold](force-disposition-take-and-hold.png) | |
+| ![disruption](disruption.png) | ![priority assets](priority-assets.png) | ![purge the foe](purge-the-foe.png) |
+| ![reconnaissance](reconnaissance.png) | ![take and hold](take-and-hold.png) |  |
