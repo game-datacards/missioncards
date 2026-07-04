@@ -15,6 +15,10 @@ The cards come in two sizes, each with a no-bleed and a print-bleed variant. Eve
 - **[`mtg/no-bleed/`](mtg/no-bleed/README.md)** — Standard / Magic the Gathering sized cards (63 x 88 mm), no bleed, ready to print and trim at home.
 - **[`mtg/bleed/`](mtg/bleed/README.md)** — Standard / Magic the Gathering sized cards (63 x 88 mm) with print bleed, ready to upload to a print-on-demand service.
 
+In addition, a set of terrain layout cards shows the recommended terrain placement for each mission matchup:
+
+- **[`terrain/`](terrain/README.md)** — Tarot sized terrain layout cards, in no-bleed and print-bleed variants, each with a *with measurements* and a *without measurements* set. MTG sized versions are not available yet.
+
 Each deck lives in its own folder as individual card images, ready for printing. The `card-backs` folder holds the colour-coded reverse sides shared across each deck.
 
 | Deck | Tarot (no bleed) | Tarot (bleed) | MTG (no bleed) | MTG (bleed) |
@@ -48,6 +52,15 @@ Designed as standard playing card size: 63 x 88 mm (2.5 x 3.5 in), the same size
 - **With bleed (`mtg/bleed/`)** — 1642 x 2242 pixels, the same artwork extended past the cut line, roughly 600 DPI at card size. Best suited to print-on-demand services.
 
 Print fronts and backs double-sided, or print fronts only and use sleeves with an opaque backing. The colour-coded card backs live in each variant's `card-backs` folder.
+
+### Terrain layouts (`terrain/`)
+
+Tarot sized (70 x 120 mm) terrain layout cards showing the recommended terrain placement for each mission matchup. Every matchup comes as three alternative layouts. They are offered along two axes:
+
+- **Bleed** — `terrain/no-bleed/` (1653 x 2833 px) prints and trims at home; `terrain/bleed/` (1796 x 2976 px) adds a print bleed and cut marks for print-on-demand.
+- **Measurements** — a `with-measurements` set prints the placement / movement measurements onto the layout, and a `no-measurements` set leaves them off.
+
+Only Tarot sized versions exist for now; MTG sized terrain layouts are not available yet. See [`terrain/README.md`](terrain/README.md) for the full index.
 
 ## Contributing
 
