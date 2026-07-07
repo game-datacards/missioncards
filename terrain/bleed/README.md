@@ -8,5 +8,5 @@ Each terrain layout shows the recommended terrain placement for a mission matchu
 
 | Set | Layouts |
 | --- | --- |
-| [No Measurements](no-measurements/README.md) | 60 |
-| [With Measurements](with-measurements/README.md) | 60 |
+| [No Measurements](no-measurements/README.md) | 45 |
+| [With Measurements](with-measurements/README.md) | 45 |
