@@ -1,3 +1,6 @@
 .DS_Store
 Thumbs.db
 temp/
+
+# Track this repo's CLAUDE.md even though the global gitignore excludes it
+!CLAUDE.md
