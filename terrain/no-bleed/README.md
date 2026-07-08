@@ -10,3 +10,5 @@ Each terrain layout shows the recommended terrain placement for a mission matchu
 | --- | --- |
 | [No Measurements](no-measurements/README.md) | 45 |
 | [With Measurements](with-measurements/README.md) | 45 |
+
+Both sets also include `terrain-layout-back.png`, the shared card back.

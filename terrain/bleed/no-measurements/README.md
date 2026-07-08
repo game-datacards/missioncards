@@ -21,3 +21,9 @@ Tarot sized terrain layouts (70 x 120 mm) with print bleed and cut marks, withou
 | ![take and hold vs priority assets 1](take-and-hold-vs-priority-assets-1.png) | ![take and hold vs priority assets 2](take-and-hold-vs-priority-assets-2.png) | ![take and hold vs priority assets 3 portrait](take-and-hold-vs-priority-assets-3-portrait.png) |
 | ![take and hold vs purge the foe 1 portrait](take-and-hold-vs-purge-the-foe-1-portrait.png) | ![take and hold vs purge the foe 2](take-and-hold-vs-purge-the-foe-2.png) | ![take and hold vs purge the foe 3](take-and-hold-vs-purge-the-foe-3.png) |
 | ![take and hold vs reconnaissance 1](take-and-hold-vs-reconnaissance-1.png) | ![take and hold vs reconnaissance 2 portrait](take-and-hold-vs-reconnaissance-2-portrait.png) | ![take and hold vs reconnaissance 3](take-and-hold-vs-reconnaissance-3.png) |
+
+## Card Back
+
+Shared card back for every terrain layout in this set.
+
+![terrain layout back](terrain-layout-back.png)

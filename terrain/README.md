@@ -2,7 +2,7 @@
 
 [Back to all decks](../README.md)
 
-Print-ready terrain layout cards for Warhammer 40,000 11th edition. Each layout shows the recommended terrain placement for a mission matchup (for example *Take and Hold* vs *Reconnaissance*). Every matchup comes as several alternative layouts, including a portrait-oriented variant, for 45 layouts per set.
+Print-ready terrain layout cards for Warhammer 40,000 11th edition. Each layout shows the recommended terrain placement for a mission matchup (for example *Take and Hold* vs *Reconnaissance*). Every matchup comes as several alternative layouts, including a portrait-oriented variant, for 45 layouts per set. Each set also ships a matching card back.
 
 These layouts are currently available in **Tarot size only**. MTG sized versions are not available yet.
 
