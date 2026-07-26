@@ -11,6 +11,11 @@
 # vector cards that is visually lossless down to ~512 colours, but it does alter
 # pixels, so it is off by default.
 #
+# After compressing, every PNG is re-checked with --dry-run: if any file could
+# still be made smaller, oxipng skipped it, so it is retried and the script
+# fails loudly if it is still not optimal. Without that check a skipped file
+# silently lands in a commit unoptimised.
+#
 # Usage:
 #   scripts/optimize-cards.sh <folder> [<folder> ...] [--colors N] [--jobs N] [--dry-run]
 #
@@ -25,7 +30,7 @@
 set -euo pipefail
 
 colors=""
-jobs="$(sysctl -n hw.ncpu 2>/dev/null || echo 4)"
+jobs="$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)"
 dry=0
 dirs=()
 
@@ -70,8 +75,48 @@ fi
 
 # Lossless recompress + strip metadata. --strip safe keeps colour-correction
 # chunks (gamma/ICC) so print colour is untouched.
+#
+# Not quiet on purpose: oxipng occasionally leaves a file untouched, and with
+# -q that failure was invisible - the unoptimised file just got committed.
 echo "Lossless oxipng (-o max, $jobs threads)..."
-oxipng -r -o max --strip safe -t "$jobs" -q "${dirs[@]}"
+oxipng -r -o max --strip safe -t "$jobs" "${dirs[@]}" \
+  || echo "warning: oxipng reported errors; the check below will catch skipped files" >&2
+
+# Verify every PNG really is at its optimum. A --dry-run that reports any
+# further saving means that file was skipped, so retry those individually.
+tmpd="$(mktemp -d)"
+trap 'rm -rf "$tmpd"' EXIT
+
+find_stragglers() {
+  rm -f "$tmpd"/straggler.* 2>/dev/null || true
+  printf '%s\0' "${pngs[@]}" \
+    | xargs -0 -P "$jobs" -I{} sh -c '
+        if ! oxipng -o max --strip safe -t 1 --dry-run "$1" 2>&1 \
+             | grep -q "Total saved: 0 bytes"; then
+          printf "%s\n" "$1" > "$(mktemp "$2/straggler.XXXXXX")"
+        fi
+      ' _ {} "$tmpd"
+  cat "$tmpd"/straggler.* 2>/dev/null || true
+}
+
+echo "Verifying all $n PNG(s) are fully optimised ($jobs parallel)..."
+mapfile -t skipped < <(find_stragglers)
+
+if [ "${#skipped[@]}" -gt 0 ]; then
+  echo "  oxipng skipped ${#skipped[@]} file(s) - retrying individually:" >&2
+  for f in "${skipped[@]}"; do
+    echo "    $f" >&2
+    oxipng -o max --strip safe -t "$jobs" "$f" || true
+  done
+  mapfile -t skipped < <(find_stragglers)
+  if [ "${#skipped[@]}" -gt 0 ]; then
+    echo "error: still not fully optimised after retry:" >&2
+    printf '  %s\n' "${skipped[@]}" >&2
+    exit 1
+  fi
+  echo "  retry succeeded, all files now optimised."
+fi
+echo "Verified: all $n PNG(s) fully optimised."
 
 after=$(kb "${pngs[@]}")
 ratio=$(awk -v b="$before" -v a="$after" 'BEGIN{printf "%.2f", (a>0 ? b/a : 0)}')
