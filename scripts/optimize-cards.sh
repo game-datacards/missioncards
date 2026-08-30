@@ -99,8 +99,18 @@ find_stragglers() {
   cat "$tmpd"/straggler.* 2>/dev/null || true
 }
 
+# Populates $skipped. Not mapfile: macOS ships bash 3.2, which has no mapfile,
+# so the whole verify step died with "command not found" and never ran here.
+read_stragglers() {
+  skipped=()
+  while IFS= read -r line; do
+    [ -n "$line" ] || continue
+    skipped+=("$line")
+  done < <(find_stragglers)
+}
+
 echo "Verifying all $n PNG(s) are fully optimised ($jobs parallel)..."
-mapfile -t skipped < <(find_stragglers)
+read_stragglers
 
 if [ "${#skipped[@]}" -gt 0 ]; then
   echo "  oxipng skipped ${#skipped[@]} file(s) - retrying individually:" >&2
@@ -108,7 +118,7 @@ if [ "${#skipped[@]}" -gt 0 ]; then
     echo "    $f" >&2
     oxipng -o max --strip safe -t "$jobs" "$f" || true
   done
-  mapfile -t skipped < <(find_stragglers)
+  read_stragglers
   if [ "${#skipped[@]}" -gt 0 ]; then
     echo "error: still not fully optimised after retry:" >&2
     printf '  %s\n' "${skipped[@]}" >&2
