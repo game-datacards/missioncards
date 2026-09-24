@@ -1,0 +1,140 @@
+name: Sync mission data from datasources
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sync-missions
+  cancel-in-progress: false
+
+env:
+  SOURCE_REPOSITORY: game-datacards/datasources
+  SOURCE_PATH: 11th/gdc/missions/chapter_approved_2026_2027.json
+  SNAPSHOT: data/chapter_approved_2026_2027.en.json
+  META: data/source.json
+  BRANCH: datasources-sync/missions
+  DEFAULT_BRANCH: main
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Checkout missioncards
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.DEFAULT_BRANCH }}
+          fetch-depth: 0
+          filter: blob:none
+          sparse-checkout: |
+            data
+            scripts
+
+      - name: Checkout datasources
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.SOURCE_REPOSITORY }}
+          path: _datasources
+          sparse-checkout: 11th/gdc/missions
+
+      - name: Compare mission data
+        id: sync
+        run: |
+          node scripts/sync-missions.mjs \
+            --source "_datasources/$SOURCE_PATH" \
+            --snapshot "$SNAPSHOT" \
+            --out "$RUNNER_TEMP/sync" \
+            --repository "$SOURCE_REPOSITORY" \
+            --path "$SOURCE_PATH" \
+            --commit "$(git -C _datasources rev-parse HEAD)" \
+            --repo . | tee -a "$GITHUB_OUTPUT"
+
+      - name: Write run summary
+        run: |
+          if [ -f "$RUNNER_TEMP/sync/report.md" ]; then
+            cat "$RUNNER_TEMP/sync/report.md" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No English mission data changes compared to $DEFAULT_BRANCH." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Find sync pull request
+        id: pr
+        env:
+          HASH: ${{ steps.sync.outputs.hash }}
+        run: |
+          OPEN=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')
+          echo "open=$OPEN" >> "$GITHUB_OUTPUT"
+          CLOSED=$(gh pr list --head "$BRANCH" --state closed --limit 1 --json body,mergedAt \
+            --jq '.[0] | select(. != null and .mergedAt == null) | .body')
+          if [ -z "$OPEN" ] && [ -n "$HASH" ] && printf '%s' "$CLOSED" | grep -Fq "missions-sync-hash: $HASH"; then
+            echo "A pull request for this exact data was closed without merging. Not reopening it."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Close outdated pull request
+        if: steps.sync.outputs.changed == 'false' && steps.pr.outputs.open != ''
+        run: |
+          gh pr close "${{ steps.pr.outputs.open }}" \
+            --comment "The mission data in datasources matches $DEFAULT_BRANCH again, so this update is no longer needed."
+
+      - name: Update sync branch
+        id: push
+        if: steps.sync.outputs.changed == 'true' && steps.pr.outputs.skip != 'true'
+        env:
+          OPEN: ${{ steps.pr.outputs.open }}
+          DATA_VERSION: ${{ steps.sync.outputs.data_version }}
+        run: |
+          git config user.name "GD Developer"
+          git config user.email "develop@gdmissions.app"
+          if [ -n "$OPEN" ]; then
+            git fetch origin "$BRANCH"
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+          else
+            git checkout -B "$BRANCH"
+          fi
+          if [ -f "$SNAPSHOT" ] && cmp -s "$RUNNER_TEMP/sync/snapshot.json" "$SNAPSHOT"; then
+            echo "Sync branch already has this data."
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          mkdir -p "$(dirname "$SNAPSHOT")" "$(dirname "$META")"
+          cp "$RUNNER_TEMP/sync/snapshot.json" "$SNAPSHOT"
+          cp "$RUNNER_TEMP/sync/source.json" "$META"
+          git add "$SNAPSHOT" "$META"
+          git commit -m "Update mission data to datasources version $DATA_VERSION"
+          if [ -n "$OPEN" ]; then
+            git push origin "$BRANCH"
+          else
+            git push --force origin "$BRANCH"
+          fi
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update pull request
+        if: steps.push.outputs.pushed == 'true'
+        env:
+          OPEN: ${{ steps.pr.outputs.open }}
+          TITLE: Update mission data to datasources version ${{ steps.sync.outputs.data_version }}
+        run: |
+          if [ -n "$OPEN" ]; then
+            URL=$(gh api -X PATCH "repos/$GH_REPO/pulls/$OPEN" \
+              -f title="$TITLE" -F body=@"$RUNNER_TEMP/sync/pr-body.md" --jq .html_url)
+          else
+            URL=$(gh api -X POST "repos/$GH_REPO/pulls" \
+              -f title="$TITLE" -f head="$BRANCH" -f base="$DEFAULT_BRANCH" \
+              -F body=@"$RUNNER_TEMP/sync/pr-body.md" --jq .html_url)
+          fi
+          echo "Pull request: $URL" >> "$GITHUB_STEP_SUMMARY"

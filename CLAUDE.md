@@ -17,6 +17,29 @@ per-folder README galleries that index them.
 - Each folder has a `README.md` gallery that references the images by filename.
   Keep filenames stable so these galleries stay valid.
 - `scripts/` — maintenance scripts (see below).
+- `data/` — English snapshot of the mission pack from
+  `game-datacards/datasources` (`data/chapter_approved_2026_2027.en.json`) plus
+  `data/source.json` recording the upstream commit and data version. Written by
+  the sync workflow; do not edit by hand.
+
+## Datasources sync
+
+`.github/workflows/sync-missions.yml` runs hourly (and on demand). It projects
+`11th/gdc/missions/chapter_approved_2026_2027.json` from datasources to English,
+drops the version/timestamp fields, and compares it with `data/`. When the
+content differs it pushes the new snapshot to the `datasources-sync/missions`
+branch and opens (or updates) a PR listing the changed missions and the card
+images that need re-rendering. Translation-only and version-only upstream
+changes are ignored.
+
+The card artwork is not regenerated automatically: re-render the listed cards,
+run the optimizer, push them to the sync branch, then merge. Run the comparison
+locally with:
+
+```bash
+node scripts/sync-missions.mjs --source <datasources>/11th/gdc/missions/chapter_approved_2026_2027.json \
+  --snapshot data/chapter_approved_2026_2027.en.json --out /tmp/sync
+```
 
 ## Commit author
 
